@@ -32,15 +32,14 @@ unsigned int color = 0;
 
 void setup() {
   OLED.init();
-  OLED.fillRect(0, 0, 95, 63, 0xffff);
+  OLED.fillRect(0, 0, 95, 63, 0x0000);
 }
 
 void loop() {
-  int x0 = random(0,95);
-  int y0 = random(0,63);
-  int x1 = random(0,95);
-  int y1 = random(0,63);
-  OLED.line(x0,y0,x1,y1,color);
+  int i;
+  for(int i = 0;i<10;i++){
+    OLED.drawNumber(10+i*4,10,i,0xffff,0x000f);
+  }
   color += 16;
 }
 

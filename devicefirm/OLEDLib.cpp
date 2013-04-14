@@ -15,6 +15,19 @@
 #define OLEDWIDTH 96
 #define OLEDHEIGHT 64
 
+byte OLEDLib::font[150] = {
+  0,1,0,1,1,0,0,1,0,0,1,0,0,1,0,
+  1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,
+  1,1,1,0,0,1,0,1,1,0,0,1,1,1,1,
+  1,0,1,1,0,1,1,1,1,0,0,1,0,0,1,
+  1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,
+  1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,
+  1,1,1,0,0,1,0,0,1,0,1,0,0,1,0,
+  1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,
+  1,1,1,1,0,1,1,1,1,0,0,1,1,1,1,
+  1,1,1,1,0,1,1,0,1,1,0,1,1,1,1
+};
+
 OLEDLib::OLEDLib(int a_respin, int a_cspin, int a_dcpin)
 {
   respin = a_respin;
@@ -174,49 +187,8 @@ int OLEDLib::putPixel(unsigned int x0, unsigned int y0, unsigned int color)
   // Normal Return
   return 0;
 }
-/*
-int OLEDLib::line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, unsigned int color)
-{
-  if(!initialized){
-    // Error Return
-    return 1;
-  }
 
-  int dx = abs(x1 - x0);
-  int dy = abs(y1 - y0);
-  
-  int sx,sy;
-  if(x0 < x1){
-    sx = 1;
-  } else {
-    sx = -1;
-  }
-  if(y0 < y1){
-    sy = 1;
-  } else {
-    sy = -1;
-  }
-  int err = dx - dy;
-  
-  int e2,count;
-  while(!(x0 == x1 && y0 == y1)){
-    putPixel(x0,y0,color);
-    e2 = 2*err;
-    if(e2 > -dy){
-      err = err - dy;
-      x0 = x0 + sx;
-    }
-    if(e2 < dx){
-      err = err + dx;
-      y0 = y0 + sy;
-    }
-    count++;
-    if(count > 100) break;
-  }
-  return 0;
-}
-*/
-
+// Code Refered from http://dencha.ojaru.jp/programs_07/pg_graphic_07.html
 int OLEDLib::line(int x0, int y0, int x1, int y1, unsigned int color){
     int cx, cy, pos_x, pos_y, i, lim, start, end;
     double e;
@@ -253,7 +225,7 @@ int OLEDLib::line(int x0, int y0, int x1, int y1, unsigned int color){
     return 0;
 };
 
-// 直線描画 補正
+// Code Refered from http://dencha.ojaru.jp/programs_07/pg_graphic_07.html
 int OLEDLib::adjust_lining_limit(int *p_start, int *p_end, int sx, int sy, int ex, int ey, int *p_cx, int *p_cy){
     int img_lim, img_lim_other, base_lim, other_lim;
     int *p_res, base_co, other_co, tmp, cx, cy;
@@ -312,9 +284,9 @@ int OLEDLib::adjust_lining_limit(int *p_start, int *p_end, int sx, int sy, int e
     return 0;
 }
 
+// Code Refered from http://dencha.ojaru.jp/programs_07/pg_graphic_09a1.html
 int OLEDLib::circle(unsigned int x0, unsigned int y0, unsigned int radius, unsigned int color)
 {
-  // Code Refered from http://dencha.ojaru.jp/programs_07/pg_graphic_09a1.html
   if(!initialized){
     // Error Return
     return 1;
@@ -349,5 +321,44 @@ int OLEDLib::circle(unsigned int x0, unsigned int y0, unsigned int radius, unsig
     putPixel( cy + x0, -cx + x0, color);
     
   }
+}
+
+int OLEDLib::drawNumber(unsigned int x0, unsigned int y0, unsigned int number, unsigned int color, unsigned int background)
+{
+  int i;
+
+  if(!initialized){
+    // Error Return
+    return 1;
+  }
+
+  digitalWrite(dcpin, LOW);
+  digitalWrite(cspin, LOW);
+  
+  SPI.transfer(0x15);  // set col address
+  SPI.transfer(x0);
+  SPI.transfer(x0 + 2);
+  SPI.transfer(0x75);  // set row address
+  SPI.transfer(y0);
+  SPI.transfer(y0 + 4);
+  digitalWrite(cspin, HIGH);
+
+  digitalWrite(dcpin, HIGH);
+  digitalWrite(cspin, LOW);
+
+  for(i=0; i<16; i++) {
+    if(font[number*15+i] == 1){
+      SPI.transfer((unsigned char)((color >> 8) & 0x00FF));
+      SPI.transfer((unsigned char)(color & 0x00FF));
+    } else {
+      SPI.transfer((unsigned char)((background >> 8) & 0x00FF));
+      SPI.transfer((unsigned char)(background & 0x00FF));
+    }
+  }
+
+  digitalWrite(cspin, HIGH);
+  
+  // Normal Return
+  return 0;
 }
 
