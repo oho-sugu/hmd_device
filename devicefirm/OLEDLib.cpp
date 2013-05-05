@@ -375,3 +375,30 @@ int OLEDLib::drawNumber(unsigned int x0, unsigned int y0, unsigned int number, u
   return 0;
 }
 
+int OLEDLib::drawNumbers(unsigned int x0, unsigned int y0, unsigned int number, unsigned int color, unsigned int background)
+{
+  int onenumber;
+  if(!initialized){
+    // Error Return
+    return 1;
+  }
+  
+  // Range 0-USHORT_MAX
+  if(number < 0x00 || 0xFFFF < number){
+    // Error Return
+    return 1;
+  }
+
+  onenumber = number >> 12 & 0x0000000F;
+  drawNumber(x0,y0,onenumber,color,background);
+  onenumber = number >>  8 & 0x0000000F;
+  drawNumber(x0+4,y0,onenumber,color,background);
+  onenumber = number >>  4 & 0x0000000F;
+  drawNumber(x0+8,y0,onenumber,color,background);
+  onenumber = number & 0x0000000F;
+  drawNumber(x0+12,y0,onenumber,color,background);
+  
+  // Normal Return
+  return 0;
+}
+

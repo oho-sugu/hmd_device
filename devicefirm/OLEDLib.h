@@ -12,6 +12,7 @@ class OLEDLib
       int line(int x0, int y0, int x1, int y1, unsigned int color);
       int circle(unsigned int x0, unsigned int y0, unsigned int radius, unsigned int color);
       int drawNumber(unsigned int x0, unsigned int y0, unsigned int number, unsigned int color, unsigned int background);
+      int drawNumbers(unsigned int x0, unsigned int y0, unsigned int number, unsigned int color, unsigned int background);
 
     private:
       bool initialized;

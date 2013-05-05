@@ -5,8 +5,6 @@
 #define RxD 2
 #define TxD 3
  
-#define DEBUG_ENABLED  1
-
 // Class definition
 class BTLib
 {

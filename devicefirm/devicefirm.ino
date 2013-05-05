@@ -14,6 +14,7 @@
 #include <SPI.h>
 #include "OLEDLib.h"
 #include "BT.h"
+#include "SoftpotLib.h"
 // For Bluetooth
 #include <SoftwareSerial.h>
 
@@ -27,6 +28,7 @@
 
 OLEDLib OLED = OLEDLib(PINRES, PINCS, PINDC);
 BTLib BlueTooth = BTLib();
+SoftpotLib Softpot = SoftpotLib();
 
 unsigned int color = 0;
 unsigned int count = 0;
