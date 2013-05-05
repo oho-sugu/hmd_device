@@ -338,6 +338,12 @@ int OLEDLib::drawNumber(unsigned int x0, unsigned int y0, unsigned int number, u
     // Error Return
     return 1;
   }
+  
+  // Range 0-15
+  if(number < 0x00 || 0x0F < number){
+    // Error Return
+    return 1;
+  }
 
   digitalWrite(dcpin, LOW);
   digitalWrite(cspin, LOW);

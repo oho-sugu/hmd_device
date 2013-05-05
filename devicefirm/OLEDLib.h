@@ -19,7 +19,7 @@ class OLEDLib
       int cspin;
       int dcpin;
       int adjust_lining_limit(int *p_start, int *p_end, int sx, int sy, int ex, int ey, int *p_cx, int *p_cy);
-      static byte font[150];
+      static byte font[240];
 
 };
 
