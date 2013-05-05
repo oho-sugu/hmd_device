@@ -13,6 +13,7 @@
 // For OLED drive
 #include <SPI.h>
 #include "OLEDLib.h"
+#include "BT.h"
 // For Bluetooth
 #include <SoftwareSerial.h>
 
@@ -23,11 +24,10 @@
 #define PINDC 9
 // For Softpot (Analog)
 #define PINSPOT 1
-// For Bluetooth
-#define PINRxD 2
-#define PINTxD 3
 
 OLEDLib OLED = OLEDLib(PINRES, PINCS, PINDC);
+BTLib BlueTooth = BTLib();
+
 unsigned int color = 0;
 unsigned int count = 0;
 unsigned int state = 0;
@@ -35,6 +35,7 @@ unsigned int state = 0;
 void setup() {
   OLED.init();
   OLED.fillRect(0, 0, 95, 63, 0x0000);
+  BlueTooth.init(38400);
 }
 
 void loop() {
