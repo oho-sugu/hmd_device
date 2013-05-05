@@ -1,11 +1,18 @@
 #ifndef OLEDLib_h
 #define OLEDLib_h
 
+#define PINRES 7
+#define PINCS 8
+#define PINDC 9
+
+#define OLEDWIDTH 96
+#define OLEDHEIGHT 64
+
 // Class definition
 class OLEDLib
 {
     public:
-      OLEDLib(int respin, int cspin, int dcpin);
+      OLEDLib();
       int init();
       int fillRect(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, unsigned int color);
       int putPixel(unsigned int x0, unsigned int y0, unsigned int color);

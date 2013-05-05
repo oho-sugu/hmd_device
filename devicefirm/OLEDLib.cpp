@@ -12,9 +12,6 @@
 #include "OLEDLib.h"
 #include <SPI.h>
 
-#define OLEDWIDTH 96
-#define OLEDHEIGHT 64
-
 // Font for Hexadecimal
 byte OLEDLib::font[240] = {
   0,1,0,1,1,0,0,1,0,0,1,0,0,1,0, //1
@@ -35,11 +32,8 @@ byte OLEDLib::font[240] = {
   1,1,1,1,0,0,1,1,0,1,0,0,1,0,0  //F
 };
 
-OLEDLib::OLEDLib(int a_respin, int a_cspin, int a_dcpin)
+OLEDLib::OLEDLib()
 {
-  respin = a_respin;
-  cspin = a_cspin;
-  dcpin = a_dcpin;
   initialized = false;
 }
 
@@ -47,9 +41,9 @@ int OLEDLib::init()
 {
   // OLED Setup
   // Digital Output Setting
-  pinMode(respin, OUTPUT);
-  pinMode(cspin, OUTPUT);
-  pinMode(dcpin, OUTPUT);
+  pinMode(PINRES, OUTPUT);
+  pinMode(PINCS, OUTPUT);
+  pinMode(PINDC, OUTPUT);
   
   // SPI Setup
   SPI.begin();
@@ -57,11 +51,11 @@ int OLEDLib::init()
   SPI.setBitOrder(MSBFIRST);
   
   delay(200);
-  digitalWrite(dcpin, LOW);
-  digitalWrite(cspin, LOW);
-  digitalWrite(respin, LOW);
+  digitalWrite(PINDC, LOW);
+  digitalWrite(PINCS, LOW);
+  digitalWrite(PINRES, LOW);
   delay(200);
-  digitalWrite(respin, HIGH);
+  digitalWrite(PINRES, HIGH);
   delay(200);
 
   // start oled init
@@ -140,8 +134,8 @@ int OLEDLib::fillRect(unsigned int x0, unsigned int y0, unsigned int x1, unsigne
     y0 = y0 ^ y1;
   }
 
-  digitalWrite(dcpin, LOW);
-  digitalWrite(cspin, LOW);
+  digitalWrite(PINDC, LOW);
+  digitalWrite(PINCS, LOW);
   
   SPI.transfer(0x15);  // set col address
   SPI.transfer(x0);
@@ -149,17 +143,17 @@ int OLEDLib::fillRect(unsigned int x0, unsigned int y0, unsigned int x1, unsigne
   SPI.transfer(0x75);  // set row address
   SPI.transfer(y0);
   SPI.transfer(y1);
-  digitalWrite(cspin, HIGH);
+  digitalWrite(PINCS, HIGH);
 
-  digitalWrite(dcpin, HIGH);
-  digitalWrite(cspin, LOW);
+  digitalWrite(PINDC, HIGH);
+  digitalWrite(PINCS, LOW);
 
   for(i=0; i<((x1-x0+1)*(y1-y0+1)+1); i++) {
     SPI.transfer((unsigned char)((color >> 8) & 0x00FF));
     SPI.transfer((unsigned char)(color & 0x00FF));
   }
 
-  digitalWrite(cspin, HIGH);
+  digitalWrite(PINCS, HIGH);
   
   // Normal Return
   return 0;
@@ -172,8 +166,8 @@ int OLEDLib::putPixel(unsigned int x0, unsigned int y0, unsigned int color)
     return 1;
   }
 
-  digitalWrite(dcpin, LOW);
-  digitalWrite(cspin, LOW);
+  digitalWrite(PINDC, LOW);
+  digitalWrite(PINCS, LOW);
   
   SPI.transfer(0x15);  // set col address
   SPI.transfer(x0);
@@ -181,15 +175,15 @@ int OLEDLib::putPixel(unsigned int x0, unsigned int y0, unsigned int color)
   SPI.transfer(0x75);  // set row address
   SPI.transfer(y0);
   SPI.transfer(y0+1);
-  digitalWrite(cspin, HIGH);
+  digitalWrite(PINCS, HIGH);
 
-  digitalWrite(dcpin, HIGH);
-  digitalWrite(cspin, LOW);
+  digitalWrite(PINDC, HIGH);
+  digitalWrite(PINCS, LOW);
 
   SPI.transfer((unsigned char)((color >> 8) & 0x00FF));
   SPI.transfer((unsigned char)(color & 0x00FF));
 
-  digitalWrite(cspin, HIGH);
+  digitalWrite(PINCS, HIGH);
   
   // Normal Return
   return 0;
@@ -345,8 +339,8 @@ int OLEDLib::drawNumber(unsigned int x0, unsigned int y0, unsigned int number, u
     return 1;
   }
 
-  digitalWrite(dcpin, LOW);
-  digitalWrite(cspin, LOW);
+  digitalWrite(PINDC, LOW);
+  digitalWrite(PINCS, LOW);
   
   SPI.transfer(0x15);  // set col address
   SPI.transfer(x0);
@@ -354,10 +348,10 @@ int OLEDLib::drawNumber(unsigned int x0, unsigned int y0, unsigned int number, u
   SPI.transfer(0x75);  // set row address
   SPI.transfer(y0);
   SPI.transfer(y0 + 4);
-  digitalWrite(cspin, HIGH);
+  digitalWrite(PINCS, HIGH);
 
-  digitalWrite(dcpin, HIGH);
-  digitalWrite(cspin, LOW);
+  digitalWrite(PINDC, HIGH);
+  digitalWrite(PINCS, LOW);
 
   for(i=0; i<16; i++) {
     if(font[number*15+i] == 1){
@@ -369,7 +363,7 @@ int OLEDLib::drawNumber(unsigned int x0, unsigned int y0, unsigned int number, u
     }
   }
 
-  digitalWrite(cspin, HIGH);
+  digitalWrite(PINCS, HIGH);
   
   // Normal Return
   return 0;
