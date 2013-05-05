@@ -15,24 +15,23 @@
 // For Bluetooth
 #include <SoftwareSerial.h>
 
+// My Lib
 #include "OLEDLib.h"
 #include "BT.h"
 #include "SoftpotLib.h"
 
+// Instancialize
 OLEDLib OLED = OLEDLib();
 BTLib BlueTooth = BTLib();
 SoftpotLib Softpot = SoftpotLib();
 
-unsigned int color = 0;
-unsigned int count = 0;
-unsigned int state = 0;
-
 void setup() {
   OLED.init();
   OLED.fillRect(0, 0, 95, 63, 0x0000);
-  BlueTooth.init(38400);
+//  BlueTooth.init(38400);
 }
 
 void loop() {
+  OLED.drawNumbers(10,10,Softpot.read(),0xffff,0x0000);
 }
 

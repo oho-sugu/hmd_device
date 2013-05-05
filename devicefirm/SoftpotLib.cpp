@@ -15,7 +15,7 @@ SoftpotLib::SoftpotLib()
 {
 }
 
-int SoftpotLib::bareRead()
+int SoftpotLib::read()
 {
   return analogRead(SENSORPIN);
 }

@@ -14,6 +14,7 @@
 
 // Font for Hexadecimal
 byte OLEDLib::font[240] = {
+  1,1,1,1,0,1,1,0,1,1,0,1,1,1,1, //0
   0,1,0,1,1,0,0,1,0,0,1,0,0,1,0, //1
   1,1,1,0,0,1,1,1,1,1,0,0,1,1,1, //2
   1,1,1,0,0,1,0,1,1,0,0,1,1,1,1, //3
@@ -23,7 +24,6 @@ byte OLEDLib::font[240] = {
   1,1,1,0,0,1,0,0,1,0,1,0,0,1,0, //7
   1,1,1,1,0,1,1,1,1,1,0,1,1,1,1, //8
   1,1,1,1,0,1,1,1,1,0,0,1,1,1,1, //9
-  1,1,1,1,0,1,1,0,1,1,0,1,1,1,1, //0
   0,1,0,1,0,1,1,0,1,1,1,1,1,0,1, //A
   1,1,0,1,0,1,1,1,1,1,0,1,1,1,1, //B
   1,1,1,1,0,0,1,0,0,1,0,0,1,1,1, //C
@@ -389,7 +389,7 @@ int OLEDLib::drawNumbers(unsigned int x0, unsigned int y0, unsigned int number, 
   drawNumber(x0+4,y0,onenumber,color,background);
   onenumber = number >>  4 & 0x0000000F;
   drawNumber(x0+8,y0,onenumber,color,background);
-  onenumber = number & 0x0000000F;
+  onenumber = number       & 0x0000000F;
   drawNumber(x0+12,y0,onenumber,color,background);
   
   // Normal Return
