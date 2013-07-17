@@ -49,12 +49,12 @@ void loop()
       temp=blueToothSerial.read(); 
   }
   Serial.println("You are connected");
-  blueToothSerial.print("You are connected");      //You can write you BT communication logic here
+  blueToothSerial.print("You are connected with BT");      //You can write you BT communication logic here
   while(1)  {
     temp=blueToothSerial.read();
     switch(temp)  {
-      case 'O':{while(temp!='N')  {temp=blueToothSerial.read();}  digitalWrite(5,HIGH);break;}
-      case 'S':{while(temp!='H')  {temp=blueToothSerial.read();}  digitalWrite(5,LOW);break;}
+      case 'O':{while(temp!='N')  {temp=blueToothSerial.read();}  digitalWrite(5,HIGH);blueToothSerial.print("5HIGH");break;}
+      case 'S':{while(temp!='H')  {temp=blueToothSerial.read();}  digitalWrite(5,LOW);blueToothSerial.print("5LOW");break;}
       default:break;
     }
   }
