@@ -11,12 +11,14 @@ class BTLib
     public:
       BTLib();
       int init(int baudrate);
-      unsigned char * readLine();
+      char * readLine();
       void print(char str[]);
+      int read();
       int available();
+      void waitInitialize();
     private:
       bool initialized;
-      void setupBlueToothConnection(int baudrate);
+      void setupBlueToothConnection();
       void sendBlueToothCommand(char command[]);
       void CheckOK();
 

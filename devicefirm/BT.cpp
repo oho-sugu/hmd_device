@@ -10,7 +10,6 @@
 
 #include "Arduino.h"
 #include "BT.h"
-#include <SoftwareSerial.h>
 
 SoftwareSerial blueToothSerial(RxD,TxD);
 
@@ -21,27 +20,30 @@ BTLib::BTLib()
 
 int BTLib::init(int baudrate)
 {
-  unsigned char temp;
-
   // Bluetooth Setup
   // Digital Output Setting
   pinMode(RxD, INPUT);
   pinMode(TxD, OUTPUT);
-  setupBlueToothConnection(baudrate);
+  setupBlueToothConnection();
   
   // init done flag set
   initialized = true;
 
-  while(temp!='4')  {
-      temp=blueToothSerial.read(); 
-  }
-  
   return 0;
 }
 
-void BTLib::setupBlueToothConnection(int baudrate)
+void BTLib::waitInitialize()
 {
-    blueToothSerial.begin(baudrate); //Set BluetoothBee BaudRate to default baud rate 38400
+  unsigned char temp;
+
+  while(temp!='4')  {
+    temp=blueToothSerial.read(); 
+  }
+}
+
+void BTLib::setupBlueToothConnection()
+{
+    blueToothSerial.begin(38400); //Set BluetoothBee BaudRate to default baud rate 38400
     delay(1000);
     sendBlueToothCommand("\r\n+STWMOD=0\r\n");
     sendBlueToothCommand("\r\n+STNA=SeeedBluetooth-st\r\n");
@@ -61,22 +63,23 @@ void BTLib::CheckOK()
   {
     if(blueToothSerial.available())
     {
-    a = blueToothSerial.read();
+      a = blueToothSerial.read();
  
-    if('O' == a)
-    {
-      // Wait for next character K. available() is required in some cases, as K is not immediately available.
-      while(blueToothSerial.available()) 
+      if('O' == a)
       {
-         b = blueToothSerial.read();
-         break;
-      }
-      if('K' == b)
-      {
-        break;
+        // Wait for next character K. available() is required in some cases, as K is not immediately available.
+        while(blueToothSerial.available()) 
+        {
+          b = blueToothSerial.read();
+          break;
+        }
+        if('K' == b)
+        {
+          break;
+        }
+      
       }
     }
-   }
   }
  
   while( (a = blueToothSerial.read()) != -1)
@@ -91,9 +94,9 @@ void BTLib::sendBlueToothCommand(char command[])
     CheckOK();
 }
 
-unsigned char * BTLib::readLine(){
-  unsigned char temp;
-  unsigned char str[30];
+char * BTLib::readLine(){
+  char temp;
+  char str[30];
   int counter = 0;
   
   while(1){
@@ -115,6 +118,14 @@ unsigned char * BTLib::readLine(){
 
 void BTLib::print(char str[]){
   blueToothSerial.print(str);
+}
+
+int BTLib::read(){
+  while(1){
+    if(blueToothSerial.available()){
+      return blueToothSerial.read();
+    }
+  }
 }
 
 int BTLib::available(){
