@@ -47,7 +47,7 @@ void BTLib::setupBlueToothConnection()
     delay(1000);
     sendBlueToothCommand("\r\n+STWMOD=0\r\n");
     sendBlueToothCommand("\r\n+STNA=SeeedBluetooth-st\r\n");
-    sendBlueToothCommand("\r\n+STAUTO=0\r\n");
+    sendBlueToothCommand("\r\n+STAUTO=1\r\n");
     sendBlueToothCommand("\r\n+STOAUT=1\r\n");
     sendBlueToothCommand("\r\n +STPIN=0000\r\n");
     delay(2000); // This delay is required.
