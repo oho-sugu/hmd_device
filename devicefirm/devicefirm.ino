@@ -39,7 +39,52 @@ char h2i(char a)
 }
 
 int f2b(int a,int b){return a*10+b;}
-int f2i(int a,int b,int c,int d){return a*0xFFF+b*0xFF+c*0xF+d;}
+unsigned int f2i(unsigned int a,unsigned int b,unsigned int c,unsigned int d)
+{return 0x0000FFFF & ((a&0xF)<<12 | (b&0xF)<<8 | (c&0xF)<<4 | d&0xF);}
+
+void disptest()
+{
+  // Color Fill
+  OLED.fillRect(0,0,95,63, 0xFFFF);
+  delay(5000);
+  OLED.fillRect(0,0,95,63, 0xF800);
+  delay(5000);
+  OLED.fillRect(0,0,95,63, 0x07E0);
+  delay(5000);
+  OLED.fillRect(0,0,95,63, 0x001F);
+  delay(5000);
+  OLED.fillRect( 0,0,32,63, 0xF800);
+  OLED.fillRect(33,0,64,63, 0x07E0);
+  OLED.fillRect(65,0,95,63, 0x001F);
+  delay(5000);
+  OLED.fillRect( 0,0,95,63, 0x0000);
+  
+  // Mesh
+  OLED.line (  0,  0,  0, 63, 0xFFFF );
+  OLED.line ( 10,  0, 10, 63, 0xFFFF );
+  OLED.line ( 20,  0, 20, 63, 0xFFFF );
+  OLED.line ( 30,  0, 30, 63, 0xFFFF );
+  OLED.line ( 40,  0, 40, 63, 0xFFFF );
+  OLED.line ( 50,  0, 50, 63, 0xFFFF );
+  OLED.line ( 60,  0, 60, 63, 0xFFFF );
+  OLED.line ( 70,  0, 70, 63, 0xFFFF );
+  OLED.line ( 80,  0, 80, 63, 0xFFFF );
+  OLED.line ( 90,  0, 90, 63, 0xFFFF );
+
+  OLED.line (  0,  0, 95,  0, 0xFFFF );
+  OLED.line (  0, 10, 95, 10, 0xFFFF );
+  OLED.line (  0, 20, 95, 20, 0xFFFF );
+  OLED.line (  0, 30, 95, 30, 0xFFFF );
+  OLED.line (  0, 40, 95, 40, 0xFFFF );
+  OLED.line (  0, 50, 95, 50, 0xFFFF );
+  OLED.line (  0, 60, 95, 60, 0xFFFF );
+
+  // Center Circle
+  OLED.circle ( 48, 32, 10, 0xFFFF);
+  
+  delay(5000);
+  OLED.fillRect(0, 0, 95, 63, 0x0000);
+}
 
 void setup() {
   OLED.init();
@@ -53,12 +98,21 @@ void loop() {
   
   BlueTooth.waitInitialize();
 
-  BlueTooth.print("You are Connected with BT\n\r");
+  BlueTooth.print("you are connected with bt\n\r");
+
+  disptest();
   
   while(1){
     temp = BlueTooth.read();
     switch(temp) {
-      case 'P':
+      case 'I': // INFO
+        BlueTooth.print("ok\n\r");
+        break;
+      case 'D': // DEMO
+        disptest();
+        BlueTooth.print("ok\n\r");
+        break;
+      case 'P': // PIXEL
         for(int i = 0;i < 8;i++){
           d[i] = BlueTooth.read();
         }
@@ -67,7 +121,7 @@ void loop() {
                        f2i(h2i(d[4]), h2i(d[5]), h2i(d[6]), h2i(d[7])));
         BlueTooth.print("PixelOK\n\r");
         break;
-      case 'L':
+      case 'L': // LINE
         for(int i = 0;i < 12;i++){
           d[i] = BlueTooth.read();
         }
@@ -78,7 +132,7 @@ void loop() {
                    f2i(h2i(d[8]), h2i(d[9]), h2i(d[10]), h2i(d[11])));
         BlueTooth.print("LineOK\n\r");
         break;
-      case 'F':
+      case 'F': // FILLRECT
         for(int i = 0;i < 12;i++){
           d[i] = BlueTooth.read();
         }
@@ -89,7 +143,7 @@ void loop() {
                        f2i(h2i(d[8]), h2i(d[9]), h2i(d[10]), h2i(d[11])));
         BlueTooth.print("FRectOK\n\r");
         break;
-      case 'C':
+      case 'C': // CIRCLE
         for(int i = 0;i < 10;i++){
           d[i] = BlueTooth.read();
         }
@@ -99,7 +153,7 @@ void loop() {
                        f2i(h2i(d[6]), h2i(d[7]), h2i(d[8]), h2i(d[9])));
         BlueTooth.print("CircleOK\n\r");
         break;
-      case 'N':
+      case 'N': // NUMBER
         for(int i = 0;i < 16;i++){
           d[i] = BlueTooth.read();
         }

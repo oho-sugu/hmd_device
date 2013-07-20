@@ -14,22 +14,101 @@
 
 // Font for Hexadecimal
 byte OLEDLib::font[240] = {
-  1,1,1,1,0,1,1,0,1,1,0,1,1,1,1, //0
-  0,1,0,1,1,0,0,1,0,0,1,0,0,1,0, //1
-  1,1,1,0,0,1,1,1,1,1,0,0,1,1,1, //2
-  1,1,1,0,0,1,0,1,1,0,0,1,1,1,1, //3
-  1,0,1,1,0,1,1,1,1,0,0,1,0,0,1, //4
-  1,1,1,1,0,0,1,1,1,0,0,1,1,1,1, //5
-  1,1,1,1,0,0,1,1,1,1,0,1,1,1,1, //6
-  1,1,1,0,0,1,0,0,1,0,1,0,0,1,0, //7
-  1,1,1,1,0,1,1,1,1,1,0,1,1,1,1, //8
-  1,1,1,1,0,1,1,1,1,0,0,1,1,1,1, //9
-  0,1,0,1,0,1,1,0,1,1,1,1,1,0,1, //A
-  1,1,0,1,0,1,1,1,1,1,0,1,1,1,1, //B
-  1,1,1,1,0,0,1,0,0,1,0,0,1,1,1, //C
-  1,1,0,1,0,1,1,0,1,1,0,1,1,1,0, //D
-  1,1,1,1,0,0,1,1,0,1,0,0,1,1,1, //E
-  1,1,1,1,0,0,1,1,0,1,0,0,1,0,0  //F
+  1,1,1,
+  1,0,1,
+  1,0,1,
+  1,0,1,
+  1,1,1, //0
+
+  0,1,0,
+  0,1,1,
+  0,1,0,
+  0,1,0,
+  0,1,0, //1
+
+  1,1,1,
+  1,0,0,
+  1,1,1,
+  0,0,1,
+  1,1,1, //2
+
+  1,1,1,
+  1,0,0,
+  1,1,0,
+  1,0,0,
+  1,1,1, //3
+
+  1,0,1,
+  1,0,1,
+  1,1,1,
+  1,0,0,
+  1,0,0, //4
+
+  1,1,1,
+  0,0,1,
+  1,1,1,
+  1,0,0,
+  1,1,1, //5
+
+  1,1,1,
+  0,0,1,
+  1,1,1,
+  1,0,1,
+  1,1,1, //6
+  
+  1,1,1,
+  1,0,0,
+  1,0,0,
+  0,1,0,
+  0,1,0, //7
+  
+  1,1,1,
+  1,0,1,
+  1,1,1,
+  1,0,1,
+  1,1,1, //8
+  
+  1,1,1,
+  1,0,1,
+  1,1,1,
+  1,0,0,
+  1,1,1, //9
+  
+  0,1,0,
+  1,0,1,
+  1,0,1,
+  1,1,1,
+  1,0,1, //A
+  
+  0,1,1,
+  1,0,1,
+  1,1,1,
+  1,0,1,
+  1,1,1, //B
+  
+  1,1,1,
+  0,0,1,
+  0,0,1,
+  0,0,1,
+  1,1,1, //C
+  
+  0,1,1,
+  1,0,1,
+  1,0,1,
+  1,0,1,
+  0,1,1, //D
+  
+  1,1,1,
+  0,0,1,
+  0,1,1,
+  0,0,1,
+  1,1,1, //E
+  
+  1,1,1,
+  0,0,1,
+  0,1,1,
+  0,0,1,
+  0,0,1  //F
 };
 
 OLEDLib::OLEDLib()
@@ -312,14 +391,14 @@ int OLEDLib::circle(unsigned int x0, unsigned int y0, unsigned int radius, unsig
       --cy;
     }
     
-    putPixel( cy + x0,  cx + x0, color);
-    putPixel( cx + x0,  cy + x0, color);
-    putPixel(-cx + x0,  cy + x0, color);
-    putPixel(-cy + x0,  cx + x0, color);
-    putPixel(-cy + x0, -cx + x0, color);
-    putPixel(-cx + x0, -cy + x0, color);
-    putPixel( cx + x0, -cy + x0, color);
-    putPixel( cy + x0, -cx + x0, color);
+    putPixel( cy + x0,  cx + y0, color);
+    putPixel( cx + x0,  cy + y0, color);
+    putPixel(-cx + x0,  cy + y0, color);
+    putPixel(-cy + x0,  cx + y0, color);
+    putPixel(-cy + x0, -cx + y0, color);
+    putPixel(-cx + x0, -cy + y0, color);
+    putPixel( cx + x0, -cy + y0, color);
+    putPixel( cy + x0, -cx + y0, color);
     
   }
 }
@@ -384,13 +463,13 @@ int OLEDLib::drawNumbers(unsigned int x0, unsigned int y0, unsigned int number, 
   }
 
   onenumber = number >> 12 & 0x0000000F;
-  drawNumber(x0,y0,onenumber,color,background);
-  onenumber = number >>  8 & 0x0000000F;
-  drawNumber(x0+4,y0,onenumber,color,background);
-  onenumber = number >>  4 & 0x0000000F;
-  drawNumber(x0+8,y0,onenumber,color,background);
-  onenumber = number       & 0x0000000F;
   drawNumber(x0+12,y0,onenumber,color,background);
+  onenumber = number >>  8 & 0x0000000F;
+  drawNumber(x0 +8,y0,onenumber,color,background);
+  onenumber = number >>  4 & 0x0000000F;
+  drawNumber(x0 +4,y0,onenumber,color,background);
+  onenumber = number       & 0x0000000F;
+  drawNumber(x0   ,y0,onenumber,color,background);
   
   // Normal Return
   return 0;
