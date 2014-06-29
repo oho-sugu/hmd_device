@@ -323,8 +323,8 @@ int OLEDLib::adjust_lining_limit(int *p_start, int *p_end, int sx, int sy, int e
         other_lim = cy;
     }
     else{   // y 座標ベース
-        img_lim = OLEDWIDTH;
-        img_lim_other = OLEDHEIGHT;
+        img_lim = OLEDHEIGHT;
+        img_lim_other = OLEDWIDTH;
         base_lim = cy;
         other_lim = cx;
     }
